@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pentru Tine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- DESIGN & CULORI --- */
+        :root {
+            --primary-pink: #ff8fa3;
+            --soft-pink: #fff0f3;
+            --deep-pink: #ff4d6d;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
+            --gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-image: var(--gradient);
+            background-attachment: fixed;
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Aliniere sus pentru scroll pe mobil */
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--white);
+            padding: 40px 20px 30px;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.05);
+        }
+
+        header h1 {
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            font-size: 3rem;
+            background: -webkit-linear-gradient(45deg, var(--deep-pink), #ff8fa3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        header p {
+            margin-top: 10px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* --- CARDS (SECȚIUNI) --- */
+        .section-card {
+            background: var(--white);
+            margin: 20px;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255, 77, 109, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Linie decorativă sus */
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        h2 {
+            color: var(--deep-pink);
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- TIMERS --- */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .timer-box {
+            background: var(--soft-pink);
+            padding: 15px 10px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .timer-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--deep-pink);
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .timer-label {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .timer-date {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* --- GENERATOARE DE TEXT --- */
+        .display-area {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding: 10px;
+            font-style: italic;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.25);
+        }
+
+        /* Stil specific buton 1 */
+        .btn-pink {
+            background: var(--deep-pink);
+        }
+        .btn-pink:hover {
+            background: #e03e5d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.35);
+        }
+
+        /* Stil specific buton 2 */
+        .btn-gradient {
+            background: var(--gradient);
+            color: #444;
+        }
+        .btn-gradient:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.25);
+        }
+
+        .btn-action:active {
+            transform: scale(0.98);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--white);
+            font-size: 0.8rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .heart-beat {
+            color: #fff;
+            animation: beat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.3); }
+            60% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animatie fade-in pentru text */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1 id="greeting-title">Heeeiii</h1>
+            <p>O mică aplicație, doar pentru noi.</p>
+        </header>
+
+        <div class="section-card">
+            <h2><i class="fas fa-clock" style="color: var(--primary-pink);"></i> Timpul Nostru</h2>
+            
+            <div class="timer-grid">
+                <div class="timer-box">
+                    <span class="timer-number" id="days-talking">0</span>
+                    <span class="timer-label">Zile de când vorbim</span>
+                    <span class="timer-date">Din 23 Nov 2025</span>
+                </div>
+
+                <div class="timer-box">
+                    <span class="timer-number" id="days-meeting">0</span>
+                    <span class="timer-label">Prima ieșire</span>
+                    <span class="timer-date">Din 30 Nov 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-map-signs" style="color: var(--primary-pink);"></i> Noi Astăzi...</h2>
+            
+            <div class="display-area" id="activity-display">
+                Ce facem frumos? 🚗🍕
+            </div>
+
+            <button class="btn-action btn-pink" onclick="genereazaActivitate()">
+                <i class="fas fa-random"></i> Dă-mi o idee
+            </button>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-heart" style="color: var(--primary-pink);"></i> Motive să zâmbești</h2>
+            
+            <div class="display-area" id="reason-display">
+                Apasă când ai nevoie de o încurajare. ✨
+            </div>
+
+            <button class="btn-action btn-gradient" onclick="genereazaMotiv()">
+                <i class="fas fa-magic"></i> Mesaj pentru tine
+            </button>
+        </div>
+
+        <footer>
+            Creat cu <span class="heart-beat">❤</span>
+        </footer>
+    </div>
+
+    <script>
+        /* --- 1. CONFIGURARE DATE --- */
+        const startTalkingDate = new Date('2025-11-23T00:00:00'); 
+        const firstMeetingDate = new Date('2025-11-30T00:00:00');
+        const herBirthdayMonth = 4; // Luna Mai (0=Ian, 4=Mai)
+        const herBirthdayDay = 20;
+
+        /* --- 2. LISTE DE DATE (FILTRATE) --- */
+        
+        // Lista Activități
+        const activitati = [
+            "Mergem la o plimbare lungă (pe jos) 🚶‍♂️🚶‍♀️",
+            "Facem un playlist comun în mașină 🚗🎵",
+            "Mergem să mâncăm ceva bun (mi-e foame!) 🍔",
+            "Bârfim tot ce mișcă în sat 🤫",
+            "Maraton de filme/serial la mine sau la tine 🎬",
+            "Conduci tu, eu sunt DJ-ul (sau invers?) 🏎️",
+            "Mergem să privim stelele (că tot se văd bine la noi) ✨",
+            "Gătim ceva împreună (sper să nu dăm foc la bucătărie) 👨‍🍳",
+            "Facem poze pentru Instagram/Story 📸",
+            "Mergem la o cafea și povestim de toate ☕",
+            "Ne plimbăm cu mașina fără destinație 🛣️",
+            "Jucăm cărți sau un Board Game 🎲",
+            "Mergem la cumpărături (te ajut să alegi) 🛍️",
+            "Facem un TikTok împreună (de ce nu?) 📱",
+            "Ieșim la un desert / înghețată 🍦",
+            "Ascultăm muzică la maxim și cântăm (prost) 🎤",
+            "Ne uităm la poze vechi și râdem de noi 👶",
+            "Comandăm pizza și lenevim 🍕",
+            "Mergem într-o scurtă excursie (city break de o zi) 🗺️",
+            "Facem un picnic dacă e vreme bună 🥪"
+        ];
+
+        // Lista Motive (Fără 1, 8, 11)
+        const motive = [
+            "Știi toate secretele mele și încă vorbești cu mine. 🤐",
+            "Ești singura persoană cu care nu mă plictisesc niciodată. ✨",
+            "Arăți super bine astăzi! (Verificat) 👀",
+            "Ai gusturi bune la muzică (în mare parte). 🎵",
+            "Îmi faci ziua mai bună doar cu un mesaj. 💬",
+            "Ești mult mai puternică decât crezi. 💪",
+            "Măcar nu ești așa răutăcioasă când îți e foame... sau ești? 🍫",
+            "Zâmbetul tău rezolvă orice problemă. 😊",
+            "Apreciez că mă suporți (știu că e greu). 🙏",
+            "Ești inteligentă, amuzantă și... modestă, nu? 😉",
+            "Lumea e mai faină cu tine prin preajmă. 🌍",
+            "Oricum ar fi vremea, tu aduci soarele. ☀️"
+        ];
+
+        /* --- 3. FUNCȚII --- */
+
+        // Funcția care verifică dacă e ziua ei
+        function checkBirthday() {
+            const today = new Date();
+            if (today.getMonth() === herBirthdayMonth && today.getDate() === herBirthdayDay) {
+                document.getElementById('greeting-title').innerText = "La mulți ani! 🎉";
+            } else {
+                document.getElementById('greeting-title').innerText = "Heeeiii";
+            }
+        }
+
+        // Funcția de actualizare timer
+        function updateTimers() {
+            const now = new Date();
+            
+            // Calcul diferență în milisecunde
+            const diffTalk = now - startTalkingDate;
+            const diffMeet = now - firstMeetingDate;
+
+            // Transformare în zile (rotunjire în jos)
+            const daysTalk = Math.floor(diffTalk / (1000 * 60 * 60 * 24));
+            const daysMeet = Math.floor(diffMeet / (1000 * 60 * 60 * 24));
+
+            // Afișare (dacă e negativ, afișăm 0 - pt testare înainte de dată)
+            document.getElementById('days-talking').innerText = daysTalk > 0 ? daysTalk : 0;
+            document.getElementById('days-meeting').innerText = daysMeet > 0 ? daysMeet : 0;
+        }
+
+        // Funcția Generare Activitate
+        function genereazaActivitate() {
+            const display = document.getElementById('activity-display');
+            // Animație simplă de text
+            display.style.opacity = 0;
+            setTimeout(() => {
+                const random = Math.floor(Math.random() * activitati.length);
+                display.innerText = activitati[random];
+                display.style.opacity = 1;
+                display.classList.add('fade-in');
+            }, 200);
+        }
+
+        // Funcția Generare Motiv
+        function genereazaMotiv() {
+            const display = document.getElementById('reason-display');
+            display.style.opacity = 0;
+            setTimeout(() => {
+                const random = Math.floor(Math.random() * motive.length);
+                display.innerText = motive[random];
+                display.style.opacity = 1;
+                display.classList.add('fade-in');
+            }, 200);
+        }
+
+        /* --- 4. START --- */
+        window.onload = function() {
+            checkBirthday();
+            updateTimers();
+            // Actualizăm timer-ul la fiecare oră să fim siguri
+            setInterval(updateTimers, 3600000);
+        };
+
+    </script>
+</body>
+</html>
