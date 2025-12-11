@@ -12,25 +12,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- DESIGN & CULORI (NESCHIMBAT) --- */
+        /* --- DESIGN & CULORI --- */
         :root {
             --primary-pink: #ff8fa3;
             --soft-pink: #fff0f3;
             --deep-pink: #ff4d6d;
             --bright-red: #ff0033; 
             --text-dark: #2d3436;
-            --text-light: #636e72;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
-            --gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --text-light: #555555; /* Puțin mai închis pentru contrast pe roz */
+            --shadow: 0 10px 30px rgba(255, 77, 109, 0.25);
         }
 
         * { box-sizing: border-box; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-image: var(--gradient);
-            background-attachment: fixed;
+            /* Fundalul general (din spatele cardului) */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fecfef, #c6a7e2);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             margin: 0;
             min-height: 100vh;
             color: var(--text-dark);
@@ -41,7 +41,13 @@
             overflow-x: hidden;
         }
 
-        /* --- NOUA ANIMAȚIE: DOUĂ BUCĂȚI FRANȚE --- */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- ANIMAȚIE START: DOAR INIMA ROȘIE --- */
         #intro-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff0f3; z-index: 9999;
@@ -51,101 +57,108 @@
 
         .intro-container {
             position: relative; width: 200px; height: 200px;
-            /* Pentru a vedea unde e centrul exact */
-            /* border: 1px solid red; */
+            display: flex; justify-content: center; align-items: center;
         }
 
-        /* Stil comun pentru cele două jumătăți */
-        .broken-half {
-            position: absolute;
-            top: 0;
-            width: 200px; height: 200px;
-            background-color: var(--deep-pink);
-            opacity: 1;
-            /* Tranziție lentă și dramatică */
-            transition: all 1.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* Jumătatea Stângă (desenată cu linie frântă pe dreapta) */
-        .left-half {
-            left: 0;
-            /* Path complex pentru jumătate de inimă cu margine frântă */
-            clip-path: path('M 100 35 C 40 0 0 40 0 90 C 0 140 50 170 100 200 L 85 150 L 115 110 L 90 70 L 100 35 Z');
-            /* Poziție de start: în stânga și rotită */
-            transform: translateX(-120%) rotate(-15deg);
-        }
-
-        /* Jumătatea Dreaptă (desenată să se îmbine perfect cu stânga) */
-        .right-half {
-            left: 0;
-            /* Path complementar */
-            clip-path: path('M 100 35 C 160 0 200 40 200 90 C 200 140 150 170 100 200 L 85 150 L 115 110 L 90 70 L 100 35 Z');
-            /* Poziție de start: în dreapta și rotită opus */
-            transform: translateX(120%) rotate(15deg);
-        }
-
-        /* Clasa care le unește la centru */
-        .united {
-            transform: translateX(0) rotate(0deg) !important;
-        }
-
-        /* Inima finală roșie aprinsă (aceeași ca înainte) */
         .smooth-heart {
-            position: absolute; top: 50%; left: 50%;
-            /* Ajustat ușor scala să se potrivească peste cele unite */
-            transform: translate(-50%, -50%) scale(0.9);
             font-size: 10rem;
-            color: var(--bright-red); 
-            opacity: 0; z-index: 10;
-            transition: all 0.5s ease;
+            color: var(--bright-red);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s ease-out;
         }
 
-        /* Strălucire puternică */
-        .pulse-shine { animation: superShine 1.2s infinite alternate; }
+        .pulse-shine {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+            animation: superShine 1.2s infinite alternate 0.5s;
+        }
+
         @keyframes superShine {
-            from { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 5px var(--bright-red)); }
-            to { transform: translate(-50%, -50%) scale(1.1); filter: brightness(1.5) drop-shadow(0 0 35px #ff4d4d); }
+            from { transform: scale(1); filter: brightness(1) drop-shadow(0 0 5px var(--bright-red)); }
+            to { transform: scale(1.15); filter: brightness(1.3) drop-shadow(0 0 40px #ff4d4d); }
         }
 
-        /* --- APP CONTAINER (NESCHIMBAT) --- */
+        /* --- APP CONTAINER (FUNDAL VIU ROZ) --- */
         .app-container {
             width: 100%; max-width: 480px;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            
+            /* AICI ESTE SCHIMBAREA: Fundal animat roz în loc de alb */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 228, 233, 0.9), rgba(255, 240, 245, 0.9));
+            background-size: 200% 200%;
+            animation: cardGradient 8s ease infinite;
+            
+            backdrop-filter: blur(10px);
             border-radius: 30px; overflow: hidden;
             box-shadow: var(--shadow); position: relative;
             margin-top: 10px; margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.6);
             opacity: 0; transform: translateY(30px);
             transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: opacity, transform;
         }
+
+        @keyframes cardGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .app-visible { opacity: 1 !important; transform: translateY(0) !important; }
 
-        /* --- RESTUL CSS-ULUI RĂMÂNE NESCHIMBAT --- */
-        header { background: var(--white); padding: 40px 20px 30px; text-align: center; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; box-shadow: 0 5px 20px rgba(255, 77, 109, 0.05); }
+        /* --- ELEMENTE UI --- */
+        /* Header ușor transparent să se vadă fundalul viu */
+        header { 
+            background: rgba(255, 255, 255, 0.4); 
+            padding: 40px 20px 30px; text-align: center; 
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; 
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.05); 
+        }
         header h1 { font-family: 'Pacifico', cursive; margin: 0; font-size: 2.8rem; background: -webkit-linear-gradient(45deg, var(--deep-pink), #ff8fa3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
-        header p { margin-top: 10px; color: var(--text-light); font-size: 0.95rem; font-weight: 500; }
-        .section-card { background: var(--white); margin: 20px; padding: 25px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border: 1px solid rgba(255, 77, 109, 0.1); position: relative; overflow: hidden; }
-        .section-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--gradient); }
+        header p { margin-top: 10px; color: var(--text-light); font-size: 0.95rem; font-weight: 600; }
+        
+        /* Cardurile interioare - albe semitransparente pentru contrast */
+        .section-card { 
+            background: rgba(255, 255, 255, 0.7); 
+            margin: 20px; padding: 25px; border-radius: 25px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            position: relative; overflow: hidden; 
+        }
+        .section-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: linear-gradient(90deg, var(--primary-pink), var(--deep-pink)); }
+        
         h2 { color: var(--deep-pink); font-size: 1.3rem; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
         .timer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .timer-box { background: var(--soft-pink); padding: 15px 10px; border-radius: 20px; text-align: center; }
+        .timer-box { background: rgba(255, 255, 255, 0.8); padding: 15px 10px; border-radius: 20px; text-align: center; border: 1px solid rgba(255, 143, 163, 0.2); }
         .timer-number { font-size: 2rem; font-weight: 800; color: var(--deep-pink); display: block; line-height: 1; margin-bottom: 5px; }
         .timer-label { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .timer-date { font-size: 0.75rem; color: #999; margin-top: 5px; display: block; }
-        .display-area { min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding: 10px; font-style: italic; transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 1; transform: translateY(0); }
-        .text-hidden { opacity: 0; transform: translateY(15px); }
+        .timer-date { font-size: 0.75rem; color: #888; margin-top: 5px; display: block; }
+        
+        .display-area { 
+            min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; 
+            font-size: 1.1rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding: 10px; font-style: italic; 
+            will-change: transform, opacity;
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            opacity: 1; transform: translateY(0); 
+        }
+        .text-hidden { opacity: 0; transform: translateY(10px); }
+        
         .btn-action { width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden; color: white; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.25); transition: all 0.3s ease; }
         .btn-pink { background: var(--deep-pink); } .btn-pink:hover { background: #e03e5d; transform: translateY(-2px); }
-        .btn-gradient { background: var(--gradient); color: #444; } .btn-gradient:hover { opacity: 0.95; transform: translateY(-2px); }
+        .btn-gradient { background: linear-gradient(45deg, #ff9a9e, #ff6b6b); color: white; } .btn-gradient:hover { opacity: 0.95; transform: translateY(-2px); }
         .btn-action:active { transform: scale(0.98); }
+        
         .mood-buttons { display: flex; justify-content: space-around; margin-bottom: 15px; }
-        .mood-btn { background: #fff; border: 2px solid var(--soft-pink); font-size: 2rem; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s, background 0.2s; }
+        .mood-btn { background: rgba(255,255,255,0.8); border: 2px solid var(--primary-pink); font-size: 2rem; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.2s, background 0.2s; }
         .mood-btn:hover { transform: scale(1.15); background: var(--soft-pink); }
         .mood-btn.active { background: var(--primary-pink); border-color: var(--deep-pink); animation: bounce 0.5s; }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         #mood-message { text-align: center; font-weight: 600; color: var(--deep-pink); min-height: 40px; opacity: 0; transition: opacity 0.5s; }
+        
         .confetti { position: fixed; width: 10px; height: 10px; background-color: #f00; animation: fall linear forwards; z-index: 999; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+        
         footer { text-align: center; padding: 20px; color: #000000; font-weight: 600; font-size: 0.9rem; }
         .heart-beat { color: var(--deep-pink); animation: beat 1.5s infinite; display: inline-block; }
         @keyframes beat { 0% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(1); } 45% { transform: scale(1.3); } 60% { transform: scale(1); } 100% { transform: scale(1); } }
@@ -155,9 +168,6 @@
 
     <div id="intro-overlay">
         <div class="intro-container">
-            <div class="broken-half left-half" id="halfL"></div>
-            <div class="broken-half right-half" id="halfR"></div>
-            
             <i class="fas fa-heart smooth-heart" id="final-heart"></i>
         </div>
     </div>
@@ -220,41 +230,24 @@
     </div>
 
     <script>
-        /* --- 1. CONFIGURARE DATE --- */
+        /* --- 1. CONFIGURARE --- */
         const startTalkingDate = new Date('2025-11-23T00:00:00'); 
         const firstMeetingDate = new Date('2025-11-30T00:00:00');
         const herBirthdayMonth = 4; // Mai
         const herBirthdayDay = 20;
 
-        /* --- 2. NOUA LOGICĂ ANIMAȚIE START (DOUĂ JUMĂTĂȚI) --- */
+        /* --- 2. ANIMAȚIE INTRO SIMPLIFICATĂ --- */
         function runIntroAnimation() {
-            const halfL = document.getElementById('halfL');
-            const halfR = document.getElementById('halfR');
             const finalHeart = document.getElementById('final-heart');
             const overlay = document.getElementById('intro-overlay');
             const mainApp = document.getElementById('main-app');
             
-            // 1. Declanșăm unirea celor două jumătăți
+            // Apare inima și începe să palpaie
             setTimeout(() => {
-                halfL.classList.add('united');
-                halfR.classList.add('united');
-            }, 300);
+                finalHeart.classList.add('pulse-shine');
+            }, 100); 
 
-            // 2. După ce s-au unit (1.8s), apare inima roșie aprinsă
-            setTimeout(() => {
-                // Ascundem jumătățile
-                halfL.style.opacity = '0';
-                halfR.style.opacity = '0';
-                
-                // Apare inima finală
-                finalHeart.style.opacity = '1';
-                // Începe strălucirea puternică
-                setTimeout(() => {
-                    finalHeart.classList.add('pulse-shine');
-                }, 300);
-            }, 2100); // Timp calculat: 300ms start + 1800ms tranzitie
-
-            // 3. Finalizare și afișare aplicație
+            // Stă 3 secunde și dispare
             setTimeout(() => {
                 overlay.style.opacity = '0';
                 overlay.style.transition = 'opacity 0.8s ease';
@@ -262,10 +255,10 @@
                     overlay.style.display = 'none';
                     mainApp.classList.add('app-visible');
                 }, 800);
-            }, 4000);
+            }, 3000);
         }
 
-        /* --- RESTUL FUNCȚIILOR (NESCHIMBATE) --- */
+        /* --- 3. FUNCȚII BAZĂ --- */
         function setMood(mood, btn) {
             document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -284,7 +277,7 @@
             }
         }
 
-        /* --- LISTE SI LOGICA FARA REPETITIE (NESCHIMBATE) --- */
+        /* --- LISTE & LOGICA FĂRĂ REPETIȚIE --- */
         const activitatiMaster = [
             "Mergem la o plimbare lungă (pe jos, ca pe vremuri) 🚶‍♂️🚶‍♀️", "Facem un playlist comun în mașină 🚗🎵", "Mergem să mâncăm ceva bun (mi-e foame!) 🍔", "Bârfim tot ce mișcă în sat 🤫", "Maraton de filme/seriale 🎬", "Conduci tu, eu sunt DJ-ul (sau invers?) 🏎️", "Mergem să privim stelele (că tot se văd bine la noi) ✨", "Gătim ceva împreună (facem clătite?) 🥞", "Facem poze (să avem amintiri) 📸", "Mergem la o cafea și povestim de toate ☕", "Ne plimbăm cu mașina fără destinație (doar vibe bun) 🛣️", "Jucăm cărți sau un Board Game (te las să câștigi... poate) 🎲", "Mergem la cumpărături (am nevoie de sfatul tău) 🛍️", "Facem un TikTok împreună (de ce nu?) 📱", "Ieșim la un desert / înghețată 🍦", "Ascultăm muzică la maxim și cântăm (prost, dar cu pasiune) 🎤", "Ne uităm la poze vechi și râdem de tunsorile noastre 👶", "Comandăm pizza și lenevim 🍕", "Mergem într-o scurtă excursie (evadăm din sat) 🗺️", "Facem un picnic undeva la iarbă verde 🥪", "Mergem să vedem apusul de undeva de sus 🌅", "Te învăț să joci ceva nou (sau mă înveți tu) 🎮", "Doar stăm de vorbă în mașină, cu motorul oprit 🅿️", "Mergem la o spălătorie auto (activitate de echipă!) 💦", "Ne provocăm la un concurs de bancuri seci 😆"
         ];
@@ -309,7 +302,7 @@
                 availableBag.splice(randomIndexInBag, 1);
                 display.innerText = masterList[selectedMasterIndex];
                 display.classList.remove('text-hidden');
-            }, 300);
+            }, 250);
         }
         function genereazaActivitate() { updateDisplayText('activity-display', activitatiMaster, availableActivites); }
         function genereazaMotiv() { updateDisplayText('reason-display', motiveMaster, availableMotive); }
@@ -333,14 +326,12 @@
             document.getElementById('days-meeting').innerText = daysMeet > 0 ? daysMeet : 0;
         }
 
-        /* --- START --- */
         window.onload = function() {
             runIntroAnimation();
             checkBirthday();
             updateTimers();
             setInterval(updateTimers, 3600000);
         };
-
     </script>
 </body>
 </html>
