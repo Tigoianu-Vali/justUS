@@ -11,6 +11,10 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+          globIgnores: ['**/song.mp3']
+        },
         manifest: {
           name: 'JustUs',
           short_name: 'JustUs',

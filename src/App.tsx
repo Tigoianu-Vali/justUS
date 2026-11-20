@@ -3,8 +3,43 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Heart, CalendarHeart, Sparkles, PartyPopper, Gift, Music, Pause, Mail } from 'lucide-react';
 import { LoveLettersSection } from './components/LoveEnvelope';
 
+const TogetherCounter: React.FC<{ startDate: Date }> = ({ startDate }) => {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeTogether = Math.max(0, now.getTime() - startDate.getTime());
+  const togetherDays = Math.floor(timeTogether / (1000 * 60 * 60 * 24));
+  const togetherHours = Math.floor((timeTogether / (1000 * 60 * 60)) % 24);
+  const togetherMinutes = Math.floor((timeTogether / 1000 / 60) % 60);
+  const togetherSeconds = Math.floor((timeTogether / 1000) % 60);
+
+  return (
+    <div className="grid grid-cols-4 gap-3 text-center">
+      <div className="flex flex-col">
+        <span className="text-3xl font-bold text-primary">{togetherDays}</span>
+        <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Zile</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="text-3xl font-bold text-primary">{togetherHours}</span>
+        <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Ore</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="text-3xl font-bold text-primary">{togetherMinutes}</span>
+        <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Min</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="text-3xl font-bold text-primary">{togetherSeconds}</span>
+        <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Sec</span>
+      </div>
+    </div>
+  );
+};
+
 function App() {
-  const [now, setNow] = useState(new Date());
   const [messageOffset, setMessageOffset] = useState(0);
   const [tapHearts, setTapHearts] = useState<{ id: number, x: number, y: number }[]>([]);
   
@@ -99,10 +134,15 @@ function App() {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
-        audioRef.current.play().catch(err => console.log("Audio play failed (maybe missing file):", err));
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(err => {
+            console.log("Audio play failed:", err);
+            setIsPlaying(false);
+          });
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -123,19 +163,7 @@ function App() {
     setDateIdea(dateIdeas[Math.floor(Math.random() * dateIdeas.length)]);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   const startDate = new Date('2026-06-05T00:00:00');
-
-  // Time Together
-  const timeTogether = now.getTime() - startDate.getTime();
-  const togetherDays = Math.floor(timeTogether / (1000 * 60 * 60 * 24));
-  const togetherHours = Math.floor((timeTogether / (1000 * 60 * 60)) % 24);
-  const togetherMinutes = Math.floor((timeTogether / 1000 / 60) % 60);
-  const togetherSeconds = Math.floor((timeTogether / 1000) % 60);
 
   const messages = [
     "Abia aștept să te țin în brațe, bibica mea. ❤️",
@@ -164,7 +192,7 @@ function App() {
     "Sunt dependent de îmbrățișările tale, gurița mea."
   ];
 
-  const todayIndex = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+  const todayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
   const currentMessage = messages[(todayIndex + messageOffset) % messages.length];
 
   const handleNextMessage = () => {
@@ -172,7 +200,7 @@ function App() {
   };
 
   const handleScreenTap = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('button')) return;
+    if ((e.target as HTMLElement).closest('button, nav, input, a, [role="button"]')) return;
 
     const newHeart = {
       id: Date.now() + Math.random(),
@@ -180,16 +208,16 @@ function App() {
       y: e.clientY
     };
 
-    setTapHearts(prev => [...prev, newHeart]);
+    setTapHearts(prev => [...prev.slice(-7), newHeart]);
 
     setTimeout(() => {
       setTapHearts(prev => prev.filter(h => h.id !== newHeart.id));
-    }, 2000);
+    }, 1500);
   };
 
   return (
     <div
-      className="min-h-screen bg-background flex flex-col items-center py-12 px-4 font-body-md overflow-x-hidden relative transition-colors duration-500"
+      className="min-h-screen bg-background flex flex-col items-center py-10 px-4 font-body-md overflow-x-hidden relative transition-colors duration-500 pb-28"
       onClick={handleScreenTap}
     >
       {/* Floating Music Button */}
@@ -223,25 +251,31 @@ function App() {
         )}
       </motion.button>
       
-      {/* Hidden Audio Element */}
-      <audio ref={audioRef} src="/song.mp3" loop />
+      {/* Audio Element with preload none so mobile doesn't download 8.5MB on load */}
+      <audio ref={audioRef} src="/song.mp3" preload="none" loop />
 
-      {/* Premium Animated Gradient Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-primary-fixed/40 blur-[100px]" 
+      {/* GPU-Optimized Background Glow for Smooth 60-120FPS on Mobile */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div 
+          className="absolute -top-[10%] -left-[10%] w-[80vw] h-[80vw] max-w-[500px] max-h-[500px] rounded-full opacity-60"
+          style={{
+            background: 'radial-gradient(circle, rgba(255, 184, 202, 0.6) 0%, rgba(255, 184, 202, 0) 70%)',
+            transform: 'translateZ(0)'
+          }}
         />
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] rounded-full bg-primary/30 blur-[120px]" 
+        <div 
+          className="absolute -bottom-[10%] -right-[10%] w-[90vw] h-[90vw] max-w-[600px] max-h-[600px] rounded-full opacity-50"
+          style={{
+            background: 'radial-gradient(circle, rgba(224, 122, 147, 0.45) 0%, rgba(224, 122, 147, 0) 70%)',
+            transform: 'translateZ(0)'
+          }}
         />
-        <motion.div 
-          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute top-[40%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-secondary/30 blur-[90px]" 
+        <div 
+          className="absolute top-[35%] left-[10%] w-[70vw] h-[70vw] max-w-[400px] max-h-[400px] rounded-full opacity-40"
+          style={{
+            background: 'radial-gradient(circle, rgba(232, 198, 183, 0.5) 0%, rgba(232, 198, 183, 0) 70%)',
+            transform: 'translateZ(0)'
+          }}
         />
       </div>
 
@@ -357,24 +391,7 @@ function App() {
                   <h2 className="font-display-romantic text-xl font-semibold text-on-surface">Împreună de...</h2>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3 text-center">
-                  <div className="flex flex-col">
-                    <span className="text-3xl font-bold text-primary">{togetherDays}</span>
-                    <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Zile</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-3xl font-bold text-primary">{togetherHours}</span>
-                    <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Ore</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-3xl font-bold text-primary">{togetherMinutes}</span>
-                    <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Min</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-3xl font-bold text-primary">{togetherSeconds}</span>
-                    <span className="text-xs uppercase tracking-wider text-on-surface-variant font-medium mt-1">Sec</span>
-                  </div>
-                </div>
+                <TogetherCounter startDate={startDate} />
                 <p className="text-center text-sm text-on-surface-variant mt-4 font-medium opacity-80">
                   Din 5 Iunie 2026
                 </p>
@@ -566,7 +583,7 @@ function App() {
       </div>
 
       {/* Floating Bottom Navigation Bar (Mobile iOS Style) */}
-      <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 w-[92%] max-w-sm z-40 bg-white/90 backdrop-blur-xl border border-primary/20 rounded-full p-1.5 shadow-2xl shadow-primary/20 flex items-center justify-between pointer-events-auto">
+      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-sm z-40 bg-white/90 backdrop-blur-xl border border-primary/20 rounded-full p-1.5 shadow-2xl shadow-primary/20 flex items-center justify-between pointer-events-auto pb-[max(0.375rem,env(safe-area-inset-bottom))]">
         <button
           onClick={() => setActiveTab('home')}
           className={`flex-1 flex items-center justify-center space-x-2 py-2.5 px-3 rounded-full transition-all text-xs font-semibold relative ${
