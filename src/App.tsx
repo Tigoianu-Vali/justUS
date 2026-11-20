@@ -248,61 +248,57 @@ function App() {
         />
       </div>
 
-      {/* App Header (iOS Safe Area & Notch Ready) */}
-      <header className="w-full max-w-md pt-2 pb-5 flex items-center justify-between z-30 relative px-1">
-        {/* Date Tag */}
-        <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-primary/20 shadow-xs text-on-surface-variant text-[11px] font-semibold select-none">
-          <Heart size={12} className="text-primary" fill="currentColor" />
-          <span>Din 5 Iunie 2026</span>
-        </div>
-
-        {/* Center Title */}
+      {/* 100% Symmetrical iOS Header */}
+      <header className="w-full max-w-md pt-3 pb-6 px-2 relative flex items-center justify-center select-none">
+        {/* Title - Absolutely Centered on the Screen */}
         <motion.div
-          animate={{ scale: [1, 1.03, 1] }}
+          animate={{ scale: [1, 1.025, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center cursor-pointer select-none"
+          className="flex flex-col items-center cursor-pointer text-center"
           onClick={handleTitleClick}
           title="Apasă de 3 ori..."
         >
-          <h1 className="font-display-romantic text-3xl font-extrabold tracking-tight text-primary glow-text leading-tight">
+          <h1 className="font-display-romantic text-4xl sm:text-5xl font-extrabold tracking-tight text-primary glow-text leading-none">
             JustUs
           </h1>
-          <span className="font-display-romantic italic text-[11px] text-on-surface-variant/80 -mt-0.5">
-            Povestea Noastră ✨
-          </span>
+          <p className="font-display-romantic italic text-xs tracking-wider text-on-surface-variant/80 mt-1.5">
+            Povestea Noastră de Iubire ✨
+          </p>
         </motion.div>
 
-        {/* Music Player Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={toggleAudio}
-          className={`h-9 px-3 rounded-full shadow-xs border transition-all flex items-center space-x-1.5 text-xs font-semibold backdrop-blur-md ${
-            isPlaying
-              ? "bg-primary text-white border-primary shadow-primary/30"
-              : "bg-white/85 text-primary border-primary/25 hover:bg-white"
-          }`}
-          aria-label={isPlaying ? "Oprește muzica" : "Pornește muzica"}
-        >
-          {isPlaying ? (
-            <>
-              <Pause size={13} fill="currentColor" />
-              <span>Pauză</span>
-              <div className="flex space-x-[2px] items-end h-3 ml-0.5">
-                <motion.div animate={{ height: ["30%", "100%", "30%"] }} transition={{ duration: 0.7, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
-                <motion.div animate={{ height: ["80%", "20%", "80%"] }} transition={{ duration: 0.5, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
-                <motion.div animate={{ height: ["100%", "40%", "100%"] }} transition={{ duration: 0.8, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
-              </div>
-            </>
-          ) : (
-            <>
-              <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ repeat: Infinity, duration: 2.5 }}>
-                <Music size={13} />
-              </motion.div>
-              <span>Muzică</span>
-            </>
-          )}
-        </motion.button>
+        {/* Music Player Button - Positioned on right without shifting title center */}
+        <div className="absolute right-1 top-1/2 -translate-y-1/2">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleAudio}
+            className={`h-9 px-3 rounded-full shadow-xs border transition-all flex items-center space-x-1.5 text-xs font-semibold backdrop-blur-md ${
+              isPlaying
+                ? "bg-primary text-white border-primary shadow-primary/30"
+                : "bg-white/90 text-primary border-primary/25 hover:bg-white"
+            }`}
+            aria-label={isPlaying ? "Oprește muzica" : "Pornește muzica"}
+          >
+            {isPlaying ? (
+              <>
+                <Pause size={13} fill="currentColor" />
+                <span className="hidden sm:inline">Pauză</span>
+                <div className="flex space-x-[2px] items-end h-3 ml-0.5">
+                  <motion.div animate={{ height: ["30%", "100%", "30%"] }} transition={{ duration: 0.7, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
+                  <motion.div animate={{ height: ["80%", "20%", "80%"] }} transition={{ duration: 0.5, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
+                  <motion.div animate={{ height: ["100%", "40%", "100%"] }} transition={{ duration: 0.8, repeat: Infinity }} className="w-[2px] bg-white rounded-full" />
+                </div>
+              </>
+            ) : (
+              <>
+                <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ repeat: Infinity, duration: 2.5 }}>
+                  <Music size={13} />
+                </motion.div>
+                <span className="text-[11px]">Muzică</span>
+              </>
+            )}
+          </motion.button>
+        </div>
       </header>
 
       {/* Secret Explosion */}
@@ -384,40 +380,69 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.35 }}
-              className="w-full space-y-4"
+              className="w-full space-y-5"
             >
-              {/* Together Counter Card */}
-              <div className="w-full glass-effect rounded-3xl p-5 border border-white/70 shadow-md relative overflow-hidden group hover:shadow-lg transition-shadow duration-300">
+              {/* Together Counter Card (Spacious & Symmetrical) */}
+              <div className="w-full glass-effect rounded-3xl p-6 border border-white/70 shadow-md relative overflow-hidden group hover:shadow-lg transition-shadow duration-300">
                 <div className="absolute top-0 left-0 w-1.5 bg-primary h-full"></div>
-                <div className="flex items-center justify-between mb-3.5">
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2.5">
-                    <div className="p-2 bg-primary-container/70 rounded-full text-primary">
-                      <CalendarHeart size={18} />
-                    </div>
-                    <h2 className="font-display-romantic text-lg font-bold text-on-surface">Împreună de...</h2>
+                    <motion.div
+                      animate={{ rotate: [-5, 5, -5] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="p-2 bg-primary-container/80 rounded-full text-primary"
+                    >
+                      <CalendarHeart size={20} />
+                    </motion.div>
+                    <h2 className="font-display-romantic text-xl font-bold text-on-surface">Împreună de...</h2>
                   </div>
-                  <span className="text-[11px] font-semibold text-primary bg-primary-container/40 px-2.5 py-1 rounded-full">
-                    În fiecare secundă ❤️
+                  <span className="text-[11px] font-semibold text-primary bg-primary-container/40 px-3 py-1 rounded-full">
+                    Din 5 Iunie 2026
                   </span>
                 </div>
 
                 <TogetherCounter startDate={startDate} />
-                
-                <p className="text-center text-xs text-on-surface-variant mt-3 font-medium opacity-85">
+
+                <p className="text-center text-xs text-on-surface-variant mt-4 font-medium opacity-85">
                   Fiecare clipă alături de tine e o binecuvântare ✨
                 </p>
               </div>
 
-              {/* Message of the Day Card */}
-              <div className="w-full glass-effect rounded-3xl p-5 border border-white/70 shadow-md relative overflow-hidden flex flex-col items-center text-center">
-                <div className="flex items-center justify-between w-full mb-2">
-                  <span className="text-[10px] uppercase tracking-widest text-primary font-bold bg-primary/10 px-2.5 py-0.5 rounded-full">
+              {/* Romantic Callout to Letters Banner */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setActiveTab('letters')}
+                className="w-full bg-gradient-to-r from-pink-100/90 via-rose-50/90 to-peach-100/80 rounded-3xl p-5 border border-primary/25 shadow-md flex items-center justify-between cursor-pointer group"
+              >
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center shadow-md shadow-primary/30 group-hover:rotate-6 transition-transform">
+                    <Mail size={22} />
+                  </div>
+                  <div>
+                    <h3 className="font-display-romantic text-base font-bold text-on-surface">
+                      Plicurile cu Dragoste 💌
+                    </h3>
+                    <p className="text-xs text-on-surface-variant font-medium">
+                      Deschide o scrisoare când ți-e dor de mine...
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-primary bg-white/80 px-3 py-1.5 rounded-full shadow-xs group-hover:bg-primary group-hover:text-white transition-colors">
+                  Citește
+                </span>
+              </motion.div>
+
+              {/* Message of the Day Card (Clean & Balanced) */}
+              <div className="w-full glass-effect rounded-3xl p-6 border border-white/70 shadow-md relative overflow-hidden flex flex-col items-center text-center">
+                <div className="flex items-center justify-between w-full mb-3">
+                  <span className="text-[10px] uppercase tracking-widest text-primary font-bold bg-primary/10 px-3 py-1 rounded-full">
                     Gândul Zilei Pentru Tine
                   </span>
-                  <Quote size={14} className="text-primary/40" />
+                  <Quote size={16} className="text-primary/40" />
                 </div>
 
-                <div className="min-h-[72px] flex items-center justify-center my-1 w-full px-2">
+                <div className="min-h-[84px] flex items-center justify-center my-2 w-full px-2">
                   <AnimatePresence mode="wait">
                     <motion.p
                       key={messageOffset}
@@ -425,145 +450,33 @@ function App() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.3 }}
-                      className="font-display-romantic text-lg text-primary italic leading-relaxed"
+                      className="font-display-romantic text-xl text-primary italic leading-relaxed"
                     >
                       „{currentMessage}”
                     </motion.p>
                   </AnimatePresence>
                 </div>
 
-                <div className="flex items-center space-x-2 mt-1">
+                <div className="flex flex-col items-center mt-2">
                   <motion.button
                     whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.88 }}
                     onClick={handleNextMessage}
-                    className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all duration-300 shadow-2xs"
+                    className="p-4 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all duration-300 shadow-xs mb-2"
                     aria-label="Schimbă mesajul"
                   >
                     <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                      <Heart size={20} fill="currentColor" />
+                      <Heart size={24} fill="currentColor" />
                     </motion.div>
                   </motion.button>
-                  <span className="text-[11px] text-on-surface-variant font-medium">
-                    Apasă pe inimă pentru alt mesaj
+                  <span className="text-xs text-on-surface-variant font-medium">
+                    Apasă pe inimă pentru alt mesaj dulce
                   </span>
                 </div>
               </div>
 
-              {/* Quick Actions Grid (Fills the lower half beautifully) */}
-              <div className="w-full grid grid-cols-2 gap-3 pt-1">
-                {/* Letters Quick Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveTab('letters')}
-                  className="bg-gradient-to-br from-pink-100/90 via-rose-50/80 to-peach-100/70 rounded-3xl p-4 border border-primary/20 shadow-xs flex flex-col justify-between cursor-pointer group min-h-[130px]"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-2xl bg-primary text-white flex items-center justify-center shadow-xs group-hover:rotate-6 transition-transform">
-                      <Mail size={16} />
-                    </div>
-                    <span className="text-[10px] font-bold text-primary bg-white/80 px-2 py-0.5 rounded-full">
-                      6 plicuri
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-display-romantic text-sm font-bold text-on-surface leading-snug">
-                      Plicurile cu Dragoste 💌
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5 leading-tight">
-                      Când ți-e dor de mine...
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Date Ideas Quick Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    generateDateIdea();
-                    setActiveTab('activities');
-                  }}
-                  className="bg-gradient-to-br from-peach-100/90 via-rose-50/80 to-pink-100/70 rounded-3xl p-4 border border-secondary/40 shadow-xs flex flex-col justify-between cursor-pointer group min-h-[130px]"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-2xl bg-secondary text-on-surface flex items-center justify-center shadow-xs group-hover:rotate-6 transition-transform">
-                      <PartyPopper size={16} />
-                    </div>
-                    <span className="text-[10px] font-bold text-on-surface-variant bg-white/80 px-2 py-0.5 rounded-full">
-                      Idei romantice
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-display-romantic text-sm font-bold text-on-surface leading-snug">
-                      Ce facem diseară? 🍿
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5 leading-tight">
-                      Apasă pentru o idee nouă
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Love Reasons Quick Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    generateReason();
-                    setShowReasons(true);
-                  }}
-                  className="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 rounded-3xl p-4 border border-purple-200/50 shadow-xs flex flex-col justify-between cursor-pointer group min-h-[130px]"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-2xl bg-primary-fixed text-primary flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-                      <Heart size={16} fill="currentColor" />
-                    </div>
-                    <Sparkles size={14} className="text-primary/60" />
-                  </div>
-                  <div>
-                    <h3 className="font-display-romantic text-sm font-bold text-on-surface leading-snug">
-                      De ce te iubesc? ✨
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5 leading-tight">
-                      Află un motiv sincer
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Love Coupon Quick Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    generateCoupon();
-                    setShowCoupons(true);
-                  }}
-                  className="bg-gradient-to-br from-amber-50 via-pink-50 to-rose-50 rounded-3xl p-4 border border-amber-200/50 shadow-xs flex flex-col justify-between cursor-pointer group min-h-[130px]"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-2xl bg-secondary text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-                      <Gift size={16} />
-                    </div>
-                    <span className="text-[10px] font-bold text-amber-700 bg-white/80 px-2 py-0.5 rounded-full">
-                      Cadou
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-display-romantic text-sm font-bold text-on-surface leading-snug">
-                      Cupoane Dulci 🎟️
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5 leading-tight">
-                      Extrage un răsfăț
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
-
               {/* Romantic Bottom Note */}
-              <div className="text-center pt-3 pb-1 text-[11px] text-on-surface-variant/70 font-medium select-none">
+              <div className="text-center pt-2 pb-1 text-xs text-on-surface-variant/70 font-medium select-none">
                 Mereu împreună, oriunde am fi ❤️
               </div>
             </motion.div>
